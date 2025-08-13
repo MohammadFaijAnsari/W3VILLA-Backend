@@ -1,0 +1,5 @@
+Name     Age     Course
+Faij     21      BCA
+Rishi    22      BCA
+
+Date=Tue Aug 05 2025 
