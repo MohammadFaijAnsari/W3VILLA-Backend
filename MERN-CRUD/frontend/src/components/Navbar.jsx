@@ -2,17 +2,23 @@ import React from 'react'
 
 const Navbar = () => {
   return (
-    <div className='w-full flex justify-between h-15 shadow items-center bg-gray-300'>
-       <div className='w-[10%] h-full flex items-center'>
-          <h1 className='font-bold text-zinc-800 m-2'>CRUD Operation</h1>
-       </div>
-       <div className='w-[20%] h-full flex'>
-          <ul className='flex w-full gap-6 list-none items-center text-zinc-800 font-medium '>
-            <li className='cursor-pointer'>Home</li>
-            <li className='cursor-pointer'>About</li>
-            <li className='cursor-pointer'>Contact</li>
-          </ul>
-       </div>
+    <div className="w-full flex flex-col md:flex-row justify-between h-auto md:h-15 shadow items-center bg-gray-300 p-3">
+      
+      {/* Logo Section */}
+      <div className="w-full md:w-[30%] flex items-center justify-center md:justify-start">
+        <h1 className="font-bold text-zinc-800 text-lg md:text-xl">
+          CRUD Operation
+        </h1>
+      </div>
+
+      {/* Menu Section */}
+      <div className="w-full md:w-[50%]">
+        <ul className="flex flex-col md:flex-row w-full gap-4 md:gap-6 list-none items-center justify-center md:justify-end text-zinc-800 font-medium">
+          <li className="cursor-pointer hover:text-blue-600 transition-colors">Home</li>
+          <li className="cursor-pointer hover:text-blue-600 transition-colors">About</li>
+          <li className="cursor-pointer hover:text-blue-600 transition-colors">Contact</li>
+        </ul>
+      </div>
     </div>
   )
 }
