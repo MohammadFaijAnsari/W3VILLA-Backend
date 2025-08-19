@@ -3,6 +3,8 @@ import Swal from "sweetalert2";
 
 export const FileUploads = () => {
   const [image, setImage] = useState(null);
+
+  // Handle Upload Function
   const handleUploadsFile = async (e) => {
     e.preventDefault();
 
@@ -14,6 +16,7 @@ export const FileUploads = () => {
       });
       return;
     }
+
     const formData = new FormData();
     formData.append("image", image);
 
@@ -26,17 +29,15 @@ export const FileUploads = () => {
       const data = await res.json();
       console.log("Server Response:", data);
 
-      // ✅ SweetAlert Success Popup
       Swal.fire({
         icon: "success",
         title: "Uploaded!",
-        text: data.message, 
+        text: data.message,
         confirmButtonColor: "#3085d6",
       });
     } catch (error) {
       console.error("Error uploading file:", error);
 
-      // ❌ SweetAlert Error Popup
       Swal.fire({
         icon: "error",
         title: "Upload Failed",

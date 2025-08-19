@@ -1,93 +1,45 @@
-import React, { useState } from "react";
-import Swal from "sweetalert2";
+const express = require("express");
+const multer = require("multer");
+const path = require("path");
+const cors = require("cors");
 
-export const FileUploads = () => {
-  const [image, setImage] = useState(null);
+const app = express();
+const PORT = 8000;
 
-  // Handle Upload Function
-  const handleUploadsFile = async (e) => {
-    e.preventDefault();
+// Middleware
+app.use(cors()); // ✅ Allow requests from React (http://localhost:3000 by default)
 
-    if (!image) {
-      Swal.fire({
-        icon: "warning",
-        title: "Oops...",
-        text: "Please select an image first!",
-      });
-      return;
-    }
+// Storage config for Multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Save inside uploads folder
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Unique file name
+  },
+});
 
-    const formData = new FormData();
-    formData.append("image", image);
+const upload = multer({ storage: storage });
 
-    try {
-      const res = await fetch("http://localhost:8000/uploads", {
-        method: "POST",
-        body: formData,
-      });
+// Upload Route
+app.post("/uploads", upload.single("image"), (req, res) => {
+  try {
+    console.log("File uploaded:", req.file);
 
-      const data = await res.json();
-      console.log("Server Response:", data);
+    res.json({
+      success: true,
+      message: "File uploaded successfully!",
+      filePath: `/uploads/${req.file.filename}`,
+    });
+  } catch (error) {
+    console.error("Upload Error:", error);
+    res.status(500).json({ success: false, message: "Upload failed!" });
+  }
+});
 
-      // ✅ SweetAlert Success Popup
-      Swal.fire({
-        icon: "success",
-        title: "Uploaded!",
-        text: data.message, // "File uploaded successfully!"
-        confirmButtonColor: "#3085d6",
-      });
-    } catch (error) {
-      console.error("Error uploading file:", error);
+// Serve uploaded files statically (optional for preview)
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-      // ❌ SweetAlert Error Popup
-      Swal.fire({
-        icon: "error",
-        title: "Upload Failed",
-        text: "Something went wrong while uploading.",
-      });
-    }
-  };
-
-  return (
-    <div className="bg-gray-500 min-h-screen flex items-center justify-center">
-      <div className="bg-white rounded-xl p-10 w-full max-w-lg">
-        <h1 className="text-center text-3xl font-extrabold text-black mb-8">
-          File Uploads
-        </h1>
-
-        <form className="space-y-6">
-          <div>
-            <label
-              htmlFor="image"
-              className="block text-lg font-medium text-gray-700 mb-2"
-            >
-              Select Image
-            </label>
-
-            <input
-              type="file"
-              name="image"
-              id="image"
-              onChange={(e) => setImage(e.target.files[0])}
-              className="block w-full text-sm text-gray-700 
-                file:mr-4 file:py-2 file:px-4 
-                file:rounded-xl file:border-0 
-                file:text-sm file:font-semibold 
-                file:bg-red-400 file:text-white 
-                hover:file:bg-red-500
-                cursor-pointer border rounded-lg p-2"
-            />
-          </div>
-
-          <button
-            type="button"
-            className="text-center w-full font-bold bg-green-500 h-10 rounded text-white"
-            onClick={handleUploadsFile}
-          >
-            Upload
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-};
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
