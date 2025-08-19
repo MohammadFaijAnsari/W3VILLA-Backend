@@ -21,7 +21,7 @@ export const FileUploads = () => {
     formData.append("image", image);
 
     try {
-      const res = await fetch("http://localhost:8000/uploads", {
+      const res = await fetch("https://w3villa-backend.onrender.com/uploads", {
         method: "POST",
         body: formData,
       });
