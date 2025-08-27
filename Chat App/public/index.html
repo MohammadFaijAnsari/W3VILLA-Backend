@@ -1,0 +1,54 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatting App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-200 min-h-screen flex items-center justify-center">
+  <div class="bg-white shadow-2xl rounded-2xl w-full max-w-md p-6 flex flex-col space-y-4">
+    <!-- Heading -->
+    <h1 class="text-2xl font-bold text-center ">Chatting App</h1>
+    <div id="chatBox" class="h-64 overflow-y-auto border rounded-lg p-3 bg-gray-50">
+     
+    </div>
+
+    <!-- Input and Send button -->
+    <div class="flex space-x-2">
+      <input type="text" id="message" placeholder="Enter Message"
+        class="flex-1 px-4 py-2 border rounded-xl focus:outline-none " />
+      <button id="sendBtn"
+        class="px-5 py-2 bg-green-500 text-white rounded-xl">Send</button>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const sendBtn = document.getElementById('sendBtn');
+    const messageInput = document.getElementById('message');
+    const chatBox = document.getElementById('chatBox');
+
+    // Send Data Client -> Server
+    sendBtn.addEventListener('click', e => {
+      const message = messageInput.value.trim();
+      if (message) {
+        socket.emit('data', message);
+        messageInput.value = "";
+      }
+    })
+
+    // Listen Message from Server
+    socket.on('message', (message) => {
+      const p = document.createElement('p');
+      p.className = "bg-indigo-100  px-3 py-2 rounded-lg my-1 w-fit";
+      p.innerText = message;
+      chatBox.appendChild(p);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    })
+  </script>
+</body>
+
+</html>
