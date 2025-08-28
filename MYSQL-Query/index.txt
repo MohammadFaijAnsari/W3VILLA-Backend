@@ -104,3 +104,26 @@ Create the New Table Student & Fees Join(One to Many):-
 
    Select the Data in Two Table
     SELECT id,name,email,pfees from student,Fees where student.id=Fees.fsid;
+
+
+ Operator in MYSQL:-
+
+  IN Operator:-
+    SELECT * FROM student WHERE id IN(1,101,103,....);
+  Like Operator:-
+    SELECT * FROM Student WHERE name LIKE '%A';
+    SELECT * FROM Student WHERE name LIKE 'A%';
+   Uppercase Operator/Function:-
+     SELECT upper('w3villa') from dual;
+   Lowercase Function:-
+     SELECT lower('w3villa') from dual;
+   Length Function:
+     SELECT Length('ASGDJAH') FROM Dual;
+   Trim:-
+     SELECT Trim('   JAHGD') FROM Dual;   ltrim / rtrim( Not Work in MYSQL)
+   Concat:
+     SELECT Concat('AJHDSG','JHGAD') FROM dual;
+   Replace:-
+     SELECT REPLACE('This is a pen','is','are') from dual;
+   Substr:-
+      SELECT SUBSTR('This is a pen',2,4) from dual;  //Index Start in the 1;
