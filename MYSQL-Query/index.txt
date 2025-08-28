@@ -18,6 +18,7 @@ View Particullar Data from the Table
    SELECT (Specifice Column ) FROM TABLE_NAME WHERE CONDITION;
 Update Table Values
    UPDATE TABLE TABLE_NAME SET COLUMN='VALUES';
+
 Two Table Connect Using MYSQL Query
 
    CREATE TABLE users (
@@ -33,3 +34,73 @@ Two Table Connect Using MYSQL Query
     order_date DATE,
     FOREIGN KEY (user_id) REFERENCES users(user_id)   
    );
+
+
+MYSQL CRUD Query Example
+
+Create the Database Query
+        CREATE DATABASE W3VILLA;
+
+Use Database Query
+        USE W3VILLA;
+
+Create table inside the W3VILLA Database
+    CREATE TABLE user1(
+        id int AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(20) UNIQUE,
+        course  VARCHAR(20) DEFAULT "BCA",
+    )
+
+Insert the Data in the user1 Table
+   INSERT INTO user1 (name,email,course)  VALUES ('Joe Yu','abc@gmail.com','BCA');
+
+Multiple Record Insert in one time the user1 table
+    INSERT All INTO user1 VALUES (name,email) VALUES ('Tony','tony@gmail.com')
+        INTO user1(name,email,course) VALUES('Komal',komal@gmail.com','MCA')
+    SELECT * FROM Dual;
+
+Select the All Record & Specifice Condition
+   SELECT * from user1;
+   SELECT * FROM user1 WHERE id=101;
+
+Select Specifice Column on the Table
+   SELECT name,email from user1;
+
+Select Specifice Column on the Specifice Condition
+   SELECT name,email from user1 WHERE id=101;
+
+Alter Table Structure
+   ALTER TABLE user1 ADD COLUMN salary VARCHAR(20);
+
+Drop the Specifice Column
+   ALTER TABLE user1 DROP COLUMN name;
+
+Table Rename;
+  ALTER TABLE user1 RENAME TO user;
+
+Drop table
+  DROP TABLE user1;
+
+Update Table Existing Values
+       UPDATE user1 SET name='Faiz';  All Values Changes the Column Name in the All Data
+       UPDATE user1 SET name='Faiz' WHERE id=101;
+
+Create the New Table Student & Fees Join(One to Many):-
+
+    CREATE TABLE Student(
+        id int AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(20),
+        email VARCHAR(20) UNIQUE,
+        city DEFAULT "ALLAHABAD"
+    )
+
+   CREATE TABLE Fees (
+    fid INT,
+    pfees INT NOT NULL,
+    bfees int NOT NULL,
+    FOREIGN KEY (fsid) REFERENCES Student(id)   
+   );
+
+   Select the Data in Two Table
+    SELECT id,name,email,pfees from student,Fees where student.id=Fees.fsid;
