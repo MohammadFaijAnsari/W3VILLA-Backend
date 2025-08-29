@@ -175,8 +175,22 @@ Transaction:-Transaction is the SQL Operation that is the execute to all one tim
 ACID Rule:-It's stands for the Atomaticity Consistency Isolation Durability
   1-Atomaticity:-Transaction Time pay sari query chaley gi ya ek bhi nhi chaley gi.
         Query Success:-SAVE
-        Query Fail:-ROLLBACK
+        Query Fail:-ROLLBACK  
   2-Consistency:-Transaction complete honey kay baad database may valid state may rahna chaiya.
   3-Isolation:-Ek time pay multiple Transaction agar work karey to dono ek dusrey kay interfernce nhi karna chaiya.
   4-Durability:-Sara kaam ho janey par database may permanent chnage ho janey par koi problem nhi honi chaiya chahe 
                 system crash kyu na ho jay.
+
+               
+ Indexes:-In Database Indexes to use the fast searching and accessing.
+    
+    Drawback of Indexes:-
+           Insert Update and Delete are slove the Index Used.
+           Extra Storage Leta hai.
+   
+ How to add Index:-
+       CREATE INDEX name1 ON user (name);
+ Show Index from any Database:-
+       SHOW INDEX from user from w3villa; 
+Alter Index:-
+       ALTER TABLE user DROP INDEX name1;
