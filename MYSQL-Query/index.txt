@@ -99,7 +99,7 @@ Create the New Table Student & Fees Join(One to Many):-
     fid INT,
     pfees INT NOT NULL,
     bfees int NOT NULL,
-    FOREIGN KEY (fsid) REFERENCES Student(id)   
+    FOREIGN KEY (fid) REFERENCES Student(id)   
    );
 
    Select the Data in Two Table
@@ -113,6 +113,9 @@ Create the New Table Student & Fees Join(One to Many):-
   Like Operator:-
     SELECT * FROM Student WHERE name LIKE '%A';
     SELECT * FROM Student WHERE name LIKE 'A%';
+  UnLike Operator:-
+    SELECT * FROM Student WHERE name UNLIKE 'A%';
+
    Uppercase Operator/Function:-
      SELECT upper('w3villa') from dual;
    Lowercase Function:-
@@ -127,3 +130,53 @@ Create the New Table Student & Fees Join(One to Many):-
      SELECT REPLACE('This is a pen','is','are') from dual;
    Substr:-
       SELECT SUBSTR('This is a pen',2,4) from dual;  //Index Start in the 1;
+
+  
+    Table Structure and Data:-
+         +----+-------------+----------------+--------------+-------+------+
+         | id | name        | email          | college_name | e_sal | dept |
+         +----+-------------+----------------+--------------+-------+------+
+         |  1 | Faij        | faij@gmai.com  | VBSPU        | 20000 | HR   |
+         |  2 | Faij Ansari | faij@gmail.com | NULL         | 40000 | HR   |
+         +----+-------------+----------------+--------------+-------+------+
+
+   Nested Query:-
+
+
+      SELECT name,email FROM user WHERE e_sal=(SELECT MAX(e_sal) FROM user WHERE dept='HR')
+
+   Trigger:-Trigger automatically call hota hai aur is ko pahley say hi kisi table kay INSERT,UPDATE,DELETE may chala saktey hai
+          -Trigger ham AFTER,BEFORE dono KA create kar saktey hai.
+   Ex:-Agar ham kisi table may salary column hai to salary to negative ho gi nhi to ham kya karey gay salary 
+   ka ek trigger create karey  gay aur jab koi data insert karey gay management table may to mai waha par 0 
+   value set kar duga trigger say.
+
+   Example:-
+      CREATE TRIGGER trigger_before_insert
+       BEFORE INSERT ON management
+        FOR EACH ROW
+        BEGIN
+         IF new.salary < 0 then 
+            set new.salary =0;
+         end if;
+
+Cursor:-Cursor ek pointer hai jo database say result line by line ye row by row deta hai.Jaise ham kisi table may say sara data fetch
+    karney kay liya SELECT * FROM table_name detay hai ek baar may sara data return karta hai par ham Cursor kay throw line
+    by line fetch kar saktey hai.
+
+
+Transaction:-Transaction is the SQL Operation that is the execute to all one time or not execute anyone.
+           -ACID Rule are follow the Transaction.
+           -ACID Rule are backbone are the Transaction.
+
+      Ex:-Jaise ham kisi kay account may pass transfer kar rahey hai to wha par A kay account say pasa - aur B kay account 
+          may pasa + hona chaiya.
+         
+ACID Rule:-It's stands for the Atomaticity Consistency Isolation Durability
+  1-Atomaticity:-Transaction Time pay sari query chaley gi ya ek bhi nhi chaley gi.
+        Query Success:-SAVE
+        Query Fail:-ROLLBACK
+  2-Consistency:-Transaction complete honey kay baad database may valid state may rahna chaiya.
+  3-Isolation:-Ek time pay multiple Transaction agar work karey to dono ek dusrey kay interfernce nhi karna chaiya.
+  4-Durability:-Sara kaam ho janey par database may permanent chnage ho janey par koi problem nhi honi chaiya chahe 
+                system crash kyu na ho jay.
