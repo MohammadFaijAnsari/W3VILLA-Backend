@@ -1,12 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <%- include('partils/head') %>
-    <title>Blog Page</title>
+        <title>Add New Blog Page</title>
 </head>
+
 <body>
     <!-- Navbar Add Using SSR -->
-   <%-include('partils/navbar')%>
-   <%- include('partils/scripts') %>
+    <%-include('partils/navbar')%>
+    <!-- Dynamic Data With Database   -->
+        <div class="container mt-3" style="height:200px">
+            <%blogs.forEach(blog=> { %>
+                <div class="card" style="width: 18rem;">
+                    <img src="<%= blog.coverImageURL%>" class="card-img-top" alt='Image Not Found'>
+                    <div class="card-body">
+                        <h5 class="card-title"><%= blog.title%></h5>
+                          <p class="card-text"><%=blog.body%></p>
+                        <a href="/blog/<%=blog._id%>" class="btn btn-primary">View</a>
+                    </div>
+                </div>
+                <% }) %>
+        </div>
+        
+        <!-- Footer Include -->
+        <%- include('partils/footer') %>
+        <!-- Script Include -->
+        <%- include('partils/scripts') %>
 </body>
+
 </html>
