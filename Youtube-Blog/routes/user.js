@@ -13,8 +13,8 @@ router.get('/signin', (req, res) => {
   return res.render('signin');
 });
 //Logout ClearCookie
-router.get('/logout',(req,res)=>{
-   res.clearCookie('token').redirect('/');
+router.get('/logout', (req, res) => {
+  res.clearCookie('token').redirect('/');
 })
 // Add Blog Page Route
 
@@ -29,11 +29,10 @@ router.post('/signup', async (req, res) => {
     }
 
     await User.create({ fullname, email, password });
-
     return res.redirect('/');
   } catch (err) {
     console.error("Signup Error:", err.message);
-    
+
   }
 });
 
@@ -48,13 +47,12 @@ router.post('/signin', async (req, res) => {
     }
 
     const token = await User.matchPasswordAndGenerateToken(email, password);
-
-    // ✅ Sirf ek hi final response
     res.cookie("token", token, {
       maxAge: 1000 * 60 * 60 // 1 hour
     });
 
-    return res.redirect('/'); // final response
+    res.render('signin', { success: "Login Successfully" });
+    // res.redirect('/');
 
   } catch (error) {
     console.error("Signin Error:", error.message);
@@ -62,6 +60,8 @@ router.post('/signin', async (req, res) => {
     return res.status(401).render('signin', { error: "Incorrect Email or Password" });
   }
 });
+
+
 
 
 

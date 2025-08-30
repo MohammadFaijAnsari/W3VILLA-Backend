@@ -13,8 +13,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(checkForAuthenticationCookie("token"));
 app.use(express.static(path.resolve('./public')));
-
-
+// EJS Engine
 app.set('view engine', 'ejs');
 app.set('views', path.resolve('./views'));
 
@@ -26,8 +25,6 @@ app.get('/',async (req, res) => {
         blogs: allBlog || null  
     });
 });
-
-
 app.use('/user', userRoute);
 app.use('/blog', blogRoute);
 
