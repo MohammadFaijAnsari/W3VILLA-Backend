@@ -1,4 +1,5 @@
-const {Schema,mongoose, model}=require('mongoose');
+const mongoose = require('mongoose');
+const { Schema, model } = mongoose;
 const blogSchema=new Schema({
    title:{
     type:String,

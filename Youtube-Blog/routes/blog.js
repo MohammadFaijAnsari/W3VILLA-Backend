@@ -1,10 +1,14 @@
-const { Router } = require("express");
+const { Router, urlencoded } = require("express");
 const multer = require("multer");
+const express=require('express');
+const app=express();
 const path = require("path");
 const Blog = require("../models/blog");
-
+const comment = require("../models/comment");
 const router = Router();
-
+// Middleware
+app.use(express(urlencoded({extended:false})));
+app.use(express.json());
 // ===== Multer Storage =====
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -36,21 +40,24 @@ router.get("/add-new", (req, res) => {
 // ====== Show Single Blog by Id ======
 router.get("/:id", async (req, res) => {
   try {
-    const blog = await Blog.findById(req.params.id);
+    const blog = await Blog.findById(req.params.id).populate("createdBy");
+
     if (!blog) {
       return res.status(404).send("Blog not found");
     }
-    res.render("blog",
-       {
-        user: req.user,
-         blog
-       });
-
+    const comments = await comment.find({ blogId: req.params.id })
+      .populate("createdBy"); 
+    res.render("blog", {
+      user: req.user,
+      blog,
+      comments,  
+    });
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Error fetching blog");
+    console.error("Error fetching blog:", err);
+    res.status(500).send("Server error");
   }
 });
+
 
 // ====== Save Blog to DB ======
 router.post("/", upload.single("coverImage"), async (req, res) => {
@@ -64,10 +71,21 @@ router.post("/", upload.single("coverImage"), async (req, res) => {
     });
     return res.redirect(`/blog/${blog._id}`);
     // res.redirect('/');
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error while creating blog");
-  }
+  } catch (err) { }
 });
+
+// Comment Blog Route
+
+
+router.post("/comment/:id", async (req, res) => {            
+    await comment.create({
+      content: req.body.comment,   
+      createdBy: req.user._id,     
+      blogId: req.params.id       
+    });
+    return res.redirect(`/blog/${req.params.id}`);
+});
+
+
 
 module.exports = router;
