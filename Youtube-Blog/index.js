@@ -17,7 +17,7 @@ app.use(express.static(path.resolve('./public')));
 app.set('view engine', 'ejs');
 app.set('views', path.resolve('./views'));
 
-
+app.use(express.static('./public/'));
 app.get('/',async (req, res) => { 
     const allBlog=await Blog.find({});
     res.render('home', {
