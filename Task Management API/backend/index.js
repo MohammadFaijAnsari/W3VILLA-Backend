@@ -11,14 +11,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
-  origin: "http://localhost:5173",  // React app ka origin
-  credentials: true
+  origin: "http://localhost:5173", 
+  credentials: true,               
 }));
 
 // Test DB connection
 (async () => {
   try {
     await sequelize.authenticate();
+    await sequelize.sync();
     console.log("✅ MySQL connected");
   } catch (err) {
     console.log("❌ DB Error:", err);

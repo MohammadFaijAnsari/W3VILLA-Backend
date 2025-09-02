@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/authcontext";
 
 function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
 
+  const {login} = useContext(AuthContext)
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -20,9 +22,11 @@ function Login() {
       });
 
       const data = await res.json();
+      login(data.user)
+      
       if (res.ok) {
         alert("✅ Login successful");
-        navigate("/home");
+        navigate("/");
       } else {
         alert(data.message);
       }

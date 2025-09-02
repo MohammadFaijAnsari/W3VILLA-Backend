@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link,useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 ;
 function Register() {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    role: "",
     password: ""
   });
   const handleChange = (e) => {
@@ -17,11 +18,12 @@ function Register() {
       const res = await fetch("http://localhost:5000/api/register", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",  
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
+          role: formData.role,
           password: formData.password
         }),
       });
@@ -57,7 +59,7 @@ function Register() {
               value={formData.name}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
-              
+
             />
           </div>
           <div>
@@ -69,9 +71,23 @@ function Register() {
               value={formData.email}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
-              
+
             />
           </div>
+          <div>
+            <label className="block text-gray-600 text-sm mb-2">Role</label>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+            >
+              <option value="">Select Role</option>
+              <option value="User">User</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </div>
+
           <div>
             <label className="block text-gray-600 text-sm mb-2">Password</label>
             <input
@@ -81,7 +97,7 @@ function Register() {
               value={formData.password}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
-              
+
             />
           </div>
           <button

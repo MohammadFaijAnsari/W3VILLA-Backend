@@ -14,6 +14,11 @@ const User = sequelize.define("User", {
       isEmail: true,
     },
   },
+  role:{
+   type:DataTypes.ENUM('Admin','User'),
+   defaultValue:"User",
+   allowNull:false
+  },
   password: {
     type: DataTypes.STRING,
     allowNull: false,
