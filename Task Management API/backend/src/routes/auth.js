@@ -64,10 +64,10 @@ router.post("/login", async (req, res) => {
     if (!user) return res.status(400).json({ message: "User not found" });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+    if (!isMatch) return res.status(400).json({ message: "Invalid Password"});
 
     const token = jwt.sign(
-      { id: user.id, email: user.email , name:user.name},
+      { id: user.id, email: user.email , name:user.name,role:user.role},
       JWT_SECRET,
       { expiresIn: "1h" }
     );
@@ -78,10 +78,14 @@ router.post("/login", async (req, res) => {
       secure: false,
       maxAge: 60 * 60 * 1000,
     });
-
+    let redirectUrl = "/";
+    if (user.role === "Admin") {
+      redirectUrl = "/dashboard"; // frontend route for admin
+    }
     return res.json({
       message: "✅ Login successful",
-      user: { id: user.id, name: user.name, email: user.email },
+      user: { id: user.id, name: user.name, email: user.email,role: user.role },
+      redirect: redirectUrl, 
     });
   } catch (err) {
     console.error("Login error:", err);

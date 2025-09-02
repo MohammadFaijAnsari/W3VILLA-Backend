@@ -1,17 +1,16 @@
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/authcontext";
 import { useContext, useState } from "react";
-import { Menu, X } from "lucide-react"; // Icons
+import { Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-
 export default function Navbar() {
   const { user, logout } = useContext(AuthContext);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   return (
     <nav className="bg-gray-900 text-white shadow-md">
       <div className="container mx-auto flex justify-between items-center px-6 py-3">
-        
         {/* Logo */}
         <Link
           to="/"
@@ -24,28 +23,53 @@ export default function Navbar() {
         <div className="hidden md:flex items-center space-x-6">
           {user ? (
             <>
-              
-              <span className="bg-indigo-600 px-3 py-1 rounded-full text-sm font-medium">
-                {user.name}
-              </span>
-              <button
-                onClick={logout}
-                className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold transition"
-              >
-                Logout
-              </button>
+              {/* User Badge with Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                  className="flex items-center gap-2 bg-indigo-600 px-3 py-1 rounded-full text-sm font-medium hover:bg-indigo-500 transition"
+                >
+                  {user.name} <ChevronDown size={25} />
+                </button>
+                {/* Dropdown */}
+                <AnimatePresence>
+                  {userDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg overflow-hidden z-20"
+                    >
+                      <div className="px-4 py-3 border-b border-gray-700">
+                        <p className="text-sm font-semibold">{user.name}</p>
+                        <p className="text-xs text-gray-300">{user.role}</p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          logout();
+                          setUserDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-4 py-2 hover:bg-red-600 hover:text-white transition text-sm font-semibold"
+                      >
+                        Logout
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </>
           ) : (
             <>
               <Link
                 to="/login"
-                className="bg-indigo-600 px-4 py-2 rounded-lg text-sm font-semibold transition"
+                className="bg-indigo-600 px-4 py-2 rounded-lg text-sm font-semibold transition hover:bg-indigo-500"
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="bg-indigo-600 px-4 py-2 rounded-lg text-sm font-semibold transition"
+                className="bg-indigo-600 px-4 py-2 rounded-lg text-sm font-semibold transition hover:bg-indigo-500"
               >
                 Register
               </Link>
@@ -62,7 +86,7 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Dropdown with Animation */}
+      {/* Mobile Dropdown */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -74,25 +98,37 @@ export default function Navbar() {
           >
             {user ? (
               <>
-                <Link
-                  to="/"
-                  onClick={() => setMenuOpen(false)}
-                  className="block hover:text-indigo-400 transition duration-200"
+                <p
+                  onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                  className="bg-indigo-600 px-3 py-1 rounded-full text-sm font-medium cursor-pointer inline-block"
                 >
-                  Home
-                </Link>
-                <p className="bg-indigo-600 px-3 py-1 rounded-full text-sm font-medium inline-block">
                   {user.name}
                 </p>
-                <button
-                  onClick={() => {
-                    logout();
-                    setMenuOpen(false);
-                  }}
-                  className="w-full bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold transition"
-                >
-                  Logout
-                </button>
+
+                <AnimatePresence>
+                  {userDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="bg-gray-700 rounded-lg shadow-lg p-4 space-y-2"
+                    >
+                      <p className="text-sm font-semibold">{user.name}</p>
+                      <p className="text-xs text-gray-300">{user.role}</p>
+                      <button
+                        onClick={() => {
+                          logout();
+                          setUserDropdownOpen(false);
+                          setMenuOpen(false);
+                        }}
+                        className="w-full text-left px-4 py-2 hover:bg-red-600 hover:text-white transition text-sm font-semibold"
+                      >
+                        Logout
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </>
             ) : (
               <>
@@ -106,7 +142,7 @@ export default function Navbar() {
                 <Link
                   to="/register"
                   onClick={() => setMenuOpen(false)}
-                  className="block bg-indigo-600 px-4 py-2 rounded-lg text-sm font-semibold transition"
+                  className="block bg-indigo-600 px-4 py-2 rounded-lg text-sm font-semibold transition hover:bg-indigo-500"
                 >
                   Register
                 </Link>

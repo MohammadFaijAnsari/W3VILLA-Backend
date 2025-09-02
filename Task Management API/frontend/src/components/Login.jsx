@@ -1,12 +1,13 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authcontext";
+import toast from "react-hot-toast"; // ✅ import toast
 
 function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const { login } = useContext(AuthContext);
 
-  const {login} = useContext(AuthContext)
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -18,21 +19,20 @@ function Login() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-        credentials: "include"
+        credentials: "include",
       });
 
       const data = await res.json();
-      login(data.user)
-      
       if (res.ok) {
-        alert("✅ Login successful");
-        navigate("/");
+        login(data.user);
+        toast.success("✅ Login successful"); // ✅ Success toast
+        navigate(data.redirect);
       } else {
-        alert(data.message);
+        toast.error(`❌ ${data.message}`); // ✅ Error toast
       }
     } catch (err) {
       console.error("Login error:", err);
-      alert("❌ Something went wrong");
+      toast.error("❌ Something went wrong"); // ✅ Error toast
     }
   };
 

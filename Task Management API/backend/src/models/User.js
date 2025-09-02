@@ -1,7 +1,12 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes, INET } = require("sequelize");
 const sequelize = require("../config/db");
 
 const User = sequelize.define("User", {
+  id:{
+    type:DataTypes.INET,
+    autoIncrement:true,
+    primaryKey:true
+  },
   name: {
     type: DataTypes.STRING,
     allowNull: false,

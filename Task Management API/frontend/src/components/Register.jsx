@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-;
+import toast from "react-hot-toast";
 function Register() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -30,7 +30,7 @@ function Register() {
 
       const data = await res.json();
       if (res.ok) {
-        alert("User registered successfully ✅");
+        toast.success("User registered successfully ✅");
         navigate('/login');
       } else {
         alert(data.message || "Something went wrong ❌");

@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 
 function AddTask() {
+   const [formData,setFormData]=useState({
+     title:"",
+     desc:""
+   });
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md">
@@ -34,6 +38,12 @@ function AddTask() {
             className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-lg transition"
           >
             Add Task
+          </button>
+          <button
+            type="reset"
+            className="w-full bg-red-500  text-white font-semibold py-2 rounded-lg transition"
+          >
+            Reset
           </button>
         </form>
       </div>
