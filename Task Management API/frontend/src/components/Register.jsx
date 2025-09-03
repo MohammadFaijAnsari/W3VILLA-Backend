@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { API } from "../api/api";
 function Register() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -15,7 +16,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/api/register", {
+      const res = await fetch(`${API}/api/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,7 +50,7 @@ function Register() {
           Register
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4" method="post">
+        <form onSubmit={handleSubmit} className="space-y-4" method="post" autoComplete="off">
           <div>
             <label className="block text-gray-600 text-sm mb-2">Full Name</label>
             <input

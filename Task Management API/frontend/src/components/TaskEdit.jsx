@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { API } from "../api/api";
 
 function TaskEdit() {
   const { id } = useParams();
@@ -9,7 +10,7 @@ function TaskEdit() {
 
   // Fetch existing task by ID
   useEffect(() => {
-    fetch(`http://localhost:5000/api/tasks/${id}`)
+    fetch(`${API}/api/tasks/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setTask(data);
@@ -28,7 +29,7 @@ function TaskEdit() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch(`http://localhost:5000/api/tasks/${id}`, {
+    fetch(`${API}/api/tasks/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(task),
