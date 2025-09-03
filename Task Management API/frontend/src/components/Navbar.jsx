@@ -20,7 +20,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex items-center space-x-6">
+        <div className="hidden md:flex items-center space-x-6 top-0">
           {user ? (
             <>
               {/* User Badge with Dropdown */}

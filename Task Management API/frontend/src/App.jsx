@@ -11,7 +11,7 @@ import Profile from "./components/Profile.jsx";
 import Viewalltask from "./components/Viewalltask.jsx";
 import AdminRoute from "./components/AdminRoute.jsx";
 import UserRoute from "./components/UserRoute.jsx";
-
+import TaskEdit from "./components/TaskEdit.jsx";
 function App() {
   return (
     <Router>
@@ -19,11 +19,12 @@ function App() {
       <Toaster position="top-right"/>
       <div className="p-4">
         <Routes>
-          <Route path="/" element={<UserRoute><Home /></UserRoute>} />
+          <Route path="/" element={<UserRoute><Home/></UserRoute>} />
           <Route path="/dashboard" element={<AdminRoute><Dashboard /></AdminRoute>} />
           <Route path="/add-task" element={<AdminRoute><Addtask /></AdminRoute>} />
           <Route path="/viewalltask" element={<AdminRoute><Viewalltask /></AdminRoute>} />
           <Route path="/userprofile" element={<AdminRoute><Profile /></AdminRoute>} />
+          <Route path="/edit-task/:id" element={<TaskEdit><Profile /></TaskEdit>} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>
