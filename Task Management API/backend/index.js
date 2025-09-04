@@ -20,9 +20,9 @@ app.use(cors({
   try {
     await sequelize.authenticate();
     await sequelize.sync();
-    console.log("✅ MySQL connected");
+    console.log(" MySQL connected");
   } catch (err) {
-    console.log("❌ DB Error:", err);
+    console.log(" DB Error:", err);
   }
 })();
 

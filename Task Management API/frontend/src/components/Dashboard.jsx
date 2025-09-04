@@ -10,7 +10,7 @@ function Dashboard() {
   }, []);
 
   const fetchTasks = () => {
-    fetch(`${API}/api/latest-tasks`)
+    fetch(`${API}/api/tasks`)
       .then((res) => res.json())
       .then((data) => setTasks(data))
       .catch((err) => console.error("Error fetching tasks:", err));
@@ -30,6 +30,26 @@ function Dashboard() {
     }
   };
 
+  const handleStatusChange = (id, newStatus) => {
+    fetch(`${API}/api/tasks/${id}/status`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: newStatus }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.message) {
+          setTasks((prevTasks) =>
+            prevTasks.map((task) =>
+              task.id === id ? { ...task, status: newStatus } : task
+            )
+          );
+          alert(data.message);
+        }
+      })
+      .catch((err) => console.error("Error updating task status:", err));
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-100 ">
       <div className="flex flex-col md:flex-row flex-1 rounded-xl">
@@ -46,7 +66,6 @@ function Dashboard() {
                 View Tasks
               </Link>
             </li>
-            
             <li>
               <Link to="/userprofile" className="hover:text-indigo-400 block">
                 Profile
@@ -62,21 +81,25 @@ function Dashboard() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             <div className="bg-white rounded-xl shadow p-6 text-center">
-              <h3 className="text-lg font-semibold text-indigo-600">Total Tasks</h3>
+              <h3 className="text-lg font-semibold text-indigo-600">
+                Total Tasks
+              </h3>
               <p className="text-3xl font-bold mt-2">{tasks.length}</p>
             </div>
 
             <div className="bg-white rounded-xl shadow p-6 text-center">
-              <h3 className="text-lg font-semibold text-green-600">Completed</h3>
+              <h3 className="text-lg font-semibold text-green-600">
+                Completed
+              </h3>
               <p className="text-3xl font-bold mt-2">
-                {tasks.filter((t) => t.status === "completed").length}
+                {tasks.filter((t) => t.status === "Completed").length}
               </p>
             </div>
 
             <div className="bg-white rounded-xl shadow p-6 text-center">
               <h3 className="text-lg font-semibold text-red-600">Pending</h3>
               <p className="text-3xl font-bold mt-2">
-                {tasks.filter((t) => t.status === "pending").length}
+                {tasks.filter((t) => t.status === "Pending").length}
               </p>
             </div>
           </div>
@@ -90,25 +113,31 @@ function Dashboard() {
                   <th className="px-4 py-3">Title</th>
                   <th className="px-4 py-3">Description</th>
                   <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3" colSpan={2}>Action</th>
+                  <th className="px-4 py-3" colSpan={2}>
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-300">
-                {tasks.map((task,index) => (
-                  <tr key={task.id} className="hover:bg-gray-600 hover:text-white">
-
-                    <td className="px-4 py-3">{index + 1  }</td>
+                {tasks.map((task, index) => (
+                  <tr
+                    key={task.id}
+                    className="hover:bg-gray-600 hover:text-white"
+                  >
+                    <td className="px-4 py-3">{index + 1}</td>
                     <td className="px-4 py-3">{task.title}</td>
                     <td className="px-4 py-3">{task.desc}</td>
-                    <td
-                      className={`px-4 py-3 ${task.status === "completed"
-                        ? "text-green-600"
-                        : "text-red-500"
-                        } me-1` }
-                    >
-                      {task.status}
+                    <td className="px-4 py-3">
+                      <select
+                        value={task.status}
+                        onChange={(e) => handleStatusChange(task.id, e.target.value)}
+                        className="border border-gray-400 rounded-lg px-2 py-1 bg-white text-black"
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Completed">Completed</option>
+                      </select>
                     </td>
-                    
+
                     <td className="">
                       <Link
                         to={`/edit-task/${task.id}`}

@@ -5,9 +5,12 @@ import { API } from "../api/api";
 function ViewAllTask() {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
+
   useEffect(() => {
     fetchTasks();
   }, []);
+
+  // Fetch all tasks
   const fetchTasks = async () => {
     try {
       const res = await fetch(`${API}/api/tasks`);
@@ -17,6 +20,8 @@ function ViewAllTask() {
       console.error("Error fetching tasks:", error);
     }
   };
+
+  // ✅ Delete task
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this task?")) {
       try {
@@ -34,6 +39,33 @@ function ViewAllTask() {
     }
   };
 
+  // Update task status
+  const handleStatusChange = async (taskId, newStatus) => {
+    try {
+      const res = await fetch(`${API}/api/tasks/${taskId}/status`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to update status");
+      }
+
+      const data = await res.json();
+      alert(data.message);
+
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === taskId ? { ...task, status: newStatus } : task
+        )
+      );
+    } catch (err) {
+      console.error("Error updating status:", err);
+      alert("Error updating status ");
+    }
+  };
+
   return (
     <div className="min-h-screen p-8 text-white rounded-xl">
       <div className="flex justify-between items-center mb-6">
@@ -45,22 +77,39 @@ function ViewAllTask() {
           Back to Dashboard
         </button>
       </div>
-      <div className="overflow-x-auto  border border-gray-700">
+
+      <div className="overflow-x-auto border border-gray-700">
         <table className="w-full border-collapse text-left">
           <thead className="bg-black text-white uppercase text-sm">
             <tr className="text-center">
               <th className="px-4 py-3">ID</th>
               <th className="px-4 py-3">Title</th>
               <th className="px-4 py-3">Description</th>
+              <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3 text-center">Actions</th>
             </tr>
           </thead>
+
           <tbody className="divide-y divide-gray-700 text-center">
-            {tasks.map((task,index) => (
-              <tr key={task.id} className="text-black hover:bg-gray-700 hover:text-white">
-                <td className="px-4 py-3">{index+1}</td>
+            {tasks.map((task, index) => (
+              <tr
+                key={task.id}
+                className="text-black hover:bg-gray-700 hover:text-white"
+              >
+                <td className="px-4 py-3">{index + 1}</td>
                 <td className="px-4 py-3">{task.title}</td>
                 <td className="px-4 py-3">{task.desc}</td>
+                <td className="px-4 py-3">
+                  <select
+                    value={task.status}
+                    onChange={(e) => handleStatusChange(task.id, e.target.value)}
+                    className="border border-gray-400 rounded-lg px-2 py-1 bg-white text-black"
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="Completed">Completed</option>
+                  </select>
+                </td>
+
                 <td className="px-4 py-3 flex justify-center gap-3">
                   <button
                     onClick={() => navigate(`/edit-task/${task.id}`)}
@@ -80,7 +129,7 @@ function ViewAllTask() {
 
             {tasks.length === 0 && (
               <tr>
-                <td colSpan="4" className="py-4 text-gray-400">
+                <td colSpan="5" className="py-4 text-gray-400">
                   No tasks found
                 </td>
               </tr>

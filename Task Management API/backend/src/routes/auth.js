@@ -18,7 +18,7 @@ router.post("/register", async (req, res) => {
 
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      return res.status(400).json({ message: "⚠️ Email already exists" });
+      return res.status(400).json({ message: " Email already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 8);
@@ -43,7 +43,7 @@ router.post("/register", async (req, res) => {
     });
 
     res.status(201).json({
-      message: "✅ User registered successfully",
+      message: "User registered successfully",
       user: { id: newUser.id, name: newUser.name, email: newUser.email, role: newUser.role },
     });
   } catch (err) {
@@ -169,7 +169,6 @@ router.delete("/tasks/:id", async (req, res) => {
   }
 });
 // Get single task by ID
-// Get single task by ID
 router.get("/tasks/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -179,7 +178,7 @@ router.get("/tasks/:id", async (req, res) => {
       return res.status(404).json({ message: "Task not found" });
     }
 
-    res.json(task); // 👈 pure object return karega
+    res.json(task); 
   } catch (error) {
     console.error("Error fetching task:", error);
     res.status(500).json({ message: "Error fetching task" });
@@ -191,25 +190,43 @@ router.put("/tasks/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { title, desc, status } = req.body;
-
     if (!title || !desc) {
       return res.status(400).json({ message: "All fields are required" });
     }
-
     const task = await Task.findByPk(id);
     if (!task) {
       return res.status(404).json({ message: "Task not found" });
     }
-
     await task.update({ title, desc, status });
-
-    res.json({ message: "✅ Task updated successfully" });
+    res.json({ message: " Task updated successfully" });
   } catch (error) {
     console.error("Error updating task:", error);
     res.status(500).json({ message: "Error updating task" });
   }
 });
+//  Update only status
+router.put("/tasks/:id/status", async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  try {
+    const task = await Task.findByPk(id);
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
 
+    // validate status
+    if (!["Pending", "Completed"].includes(status)) {
+      return res.status(400).json({ message: "Invalid status value" });
+    }
 
+    task.status = status;
+    await task.save();
+
+    res.json({ message: " Task status updated", task });
+  } catch (err) {
+    console.error("Error updating task status:", err);
+    res.status(500).json({ message: "Error updating task status" });
+  }
+});
 
 module.exports = router;

@@ -47,8 +47,6 @@ const AuthProvider = ({ children }) => {
       method: "POST",
       credentials: "include"
     });
-
-    // ✅ Frontend state reset karo
     setUser(null);
     setIsLoggedIn(false);
 
