@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { API } from "../api/api";
+import { CheckCircle, XCircle } from "lucide-react";
 
 function Home() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // 👉 Fetch All Tasks
   useEffect(() => {
     const fetchTasks = async () => {
       try {
@@ -24,7 +23,7 @@ function Home() {
     fetchTasks();
   }, []);
 
-  // 👉 Update Task Status (✅ same route as other components)
+
   const handleStatusChange = async (taskId, newStatus) => {
     try {
       const res = await fetch(`${API}/api/tasks/${taskId}/status`, {
@@ -65,6 +64,7 @@ function Home() {
               <th className="px-4 py-3">Title</th>
               <th className="px-4 py-3">Description</th>
               <th className="px-4 py-3">Task Status</th>
+              <th className="px-4 py-3">Status Icon</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700 text-black bg-white/90">
@@ -80,15 +80,21 @@ function Home() {
                       onChange={(e) =>
                         handleStatusChange(task.id, e.target.value)
                       }
-                      className={`border rounded-lg px-2 py-1 ${
-                        task.status === "Completed"
+                      className={`border rounded-lg px-2 py-1 ${task.status === "Completed"
                           ? "text-green-600"
                           : "text-red-600"
-                      }`}
+                        }`}
                     >
                       <option value="Pending">Pending</option>
                       <option value="Completed">Completed</option>
                     </select>
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    {task.status === "Completed" ? (
+                      <CheckCircle className="text-green-500 w-6 h-6 mx-auto" />
+                    ) : (
+                      <XCircle className="text-red-500 w-6 h-6 mx-auto" />
+                    )}
                   </td>
                 </tr>
               ))

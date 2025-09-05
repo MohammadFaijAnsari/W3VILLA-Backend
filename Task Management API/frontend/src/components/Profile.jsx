@@ -12,7 +12,6 @@ function Profile() {
     toast.success("Logged out successfully");
     navigate("/login");
   };
-
   return (
     <>
       <div className="p-4 flex justify-end">
@@ -46,7 +45,7 @@ function Profile() {
 
           <button
             onClick={handleLogout}
-            className="w-full mt-6 bg-red-600 hover:bg-red-500 text-white py-2 rounded-lg font-semibold transition"
+            className="w-full me-4 mt-6 bg-red-600  text-white py-2 rounded-lg font-semibold transition"
           >
             Logout
           </button>
